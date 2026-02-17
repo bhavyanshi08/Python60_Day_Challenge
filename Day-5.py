@@ -21,3 +21,9 @@ for i in range(N):
         heavy_load += [weights[i]]
     else:
         overload += [weights[i]]
+valid = len(normal_load) + len(heavy_load) + len(overload)
+affected = 0
+if PLI == 0:
+    invalid_entries += overload
+    affected = len(overload)
+    overload = []
