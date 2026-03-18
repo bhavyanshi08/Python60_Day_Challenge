@@ -1,42 +1,48 @@
-a=input("enter the Password:")
-if len(a) == 6 and a == "ganesh":
-    print("Valid password")
-    n=int(input("Enter the no of readings: "))
-    readings= [0] * n
+key = input("Enter key: ")
+if len(key) == 10:
+    print("Valid Password")
+    n = int(input("Enter number: "))
+    readings = []
     for i in range(n):
-        readings[i] = int(input())
-    usage = {
-        "efficient": [],
-        "moderate": [],
-        "high": [],
-        "invalid": []
-    }
-    for e in readings:
-        if e < 0:
-            usage["invalid"].append(e)
-        elif 0 <= e <= 50:
-            usage["efficient"].append(e)
-        elif 51 <= e <= 150:
-            usage["moderate"].append(e)
+        x = int(input())
+        readings.append(x)
+    efficient = []
+    moderate = []
+    high = []
+    invalid = []
+    
+    for i in range(n):
+        val = readings[i]
+        if val < 0:
+            invalid.append(val)
+        elif val <= 50:
+            efficient.append(val)
+        elif val <= 150:
+            moderate.append(val)
         else:
-            usage["high"].append(e)
-    valid_readings = [x for x in readings if x >= 0]
-    total_consumption = sum(valid_readings)
-    num_buildings = len(readings)
-    if len(usage["high"]) > 3:
-        result = "Overconsumption Detected"
-    elif total_consumption > 600:
-        result = "Energy Waste Detected"
-    elif abs(len(usage["efficient"]) - len(usage["moderate"])) <= 1:
-        result = "Efficient Campus"
-    else:
-        result = "Moderate Usage"
-    print("\nCategorized Readings:")
-    for key, value in usage.items():
-        print(key, ":", value)
+            high.append(val)
 
-    print("\nTotal Consumption:", total_consumption)
-    print("Number of Buildings:", num_buildings)
-    print("\nEfficiency Result:", result)
+    total = 0
+    for i in range(n):
+        if readings[i] >= 0:
+            total = total + readings[i]
+    if len(high) > 3:
+        result = "Over use"
+    elif total > 600:
+        result = "Waste"
+    elif len(efficient) - len(moderate) <= 1 and len(moderate) - len(efficient) <= 1:
+        result = "Good"
+    else:
+        result = "Normal"
+
+    print("Efficient:", efficient)
+    print("Moderate:", moderate)
+    print("High:", high)
+    print("Invalid:", invalid)
+
+    print("Total:", total)
+    print("Count:", n)
+    print("Result:", result)
+
 else:
-    print("Invalid Password")
+    print("Wrong key")
