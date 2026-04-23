@@ -1,0 +1,11 @@
+**README Description:**
+
+This project simulates a large-scale data replication system where critical analytics data is copied across multiple servers. In real-world systems, incorrect copying techniques can lead to hidden corruption, which affects predictions and system reliability. The objective of this project is to identify how improper replication impacts nested data structures and to predict potential system failures using Python and data science tools.
+
+The program generates random data for 15 zones, where each zone contains traffic, pollution, energy metrics, and historical values stored in nested structures using lists and dictionaries. It then creates assignment copy, shallow copy, and deep copy versions of the dataset to demonstrate how each copying mechanism behaves. Multi-level mutations are performed by modifying nested dictionary values and appending new values to history lists. A custom risk score is calculated using mathematical transformations such as logarithms.
+
+For advanced analysis, the program converts the dataset into a Pandas DataFrame and uses NumPy for vectorized calculations like mean, variance, anomaly detection, and manual correlation analysis. It also detects hidden corruption caused by shallow copy, identifies high-risk zones, finds consecutive risk clusters, and calculates a stability index to measure system reliability.
+
+A personalized rule is included where the user enters their roll number: if the roll number is even, the dataset is reversed, and if it is odd, the dataset is rotated by 3 positions. The program clearly displays before and after mutation states, compares original and copied data, and provides a final system decision such as System Stable, Moderate Risk, High Corruption Risk, or Critical Failure.
+
+This project helped in understanding nested data structures, shallow vs deep copy behavior, predictive analytics, anomaly detection, and how Python can be used to solve real-world data corruption problems.
