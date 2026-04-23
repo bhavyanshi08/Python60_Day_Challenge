@@ -1,0 +1,151 @@
+import random
+import pandas as pd
+import numpy as np
+import math
+user_name = input("Enter authorized developer name: ")
+if user_name.lower() != "bhavya":
+    print("Access Denied! Only Bhavya can run this Smart City Intelligence System.")
+    exit()
+print("\nAccess Granted! Welcome Bhavya\n")
+roll_number = 10790
+
+def simulate_urban_grid(num_zones=18):
+    city_data = []
+    for i in range(1, num_zones + 1):
+        record = {
+            "zone": i,
+            "traffic": random.randint(0, 100),
+            "air_quality": random.randint(0, 300),
+            "energy": random.randint(0, 500)
+        }
+        city_data.append(record)
+    city_data.append({
+        "zone": num_zones + 1,
+        "traffic": 0,
+        "air_quality": 290,
+        "energy": 450
+    })
+    return city_data
+
+def restructure_city_flow(data):
+    if roll_number % 3 == 0:
+        random.shuffle(data)
+        print("Dataset shuffled based on roll number rule.\n")
+    else:
+        n = len(data)
+        for i in range(n):
+            for j in range(i + 1, n):
+                if data[i]["traffic"] > data[j]["traffic"]:
+                    data[i], data[j] = data[j], data[i]
+        print("Dataset sorted using custom traffic algorithm.\n")
+
+    return data
+
+def assign_zone_status(data):
+    categories = {}
+    for record in data:
+        zone = record["zone"]
+        traffic = record["traffic"]
+        aqi = record["air_quality"]
+        energy = record["energy"]
+        if aqi > 200 or traffic > 80:
+            categories[zone] = "High Risk"
+        elif energy > 400:
+            categories[zone] = "Energy Critical"
+        elif traffic < 30 and aqi < 100:
+            categories[zone] = "Safe Zone"
+        else:
+            categories[zone] = "Moderate"
+    return categories
+
+def compute_intelligence_score(df):
+    df["risk_score"] = (
+        df["traffic"] * 0.35 +
+        df["air_quality"] * 0.45 +
+        df["energy"] * 0.20
+    )
+    df["sqrt_risk"] = df["risk_score"].apply(lambda x: math.sqrt(x))
+    return df
+
+def detect_red_zones(df):
+    records = df.to_dict("records")
+    n = len(records)
+    for i in range(n):
+        for j in range(i + 1, n):
+            if records[i]["risk_score"] < records[j]["risk_score"]:
+                records[i], records[j] = records[j], records[i]
+    return records[:3]
+
+def identify_hidden_patterns(df):
+    threshold = df["risk_score"].mean()
+    print("\nPattern Analysis")
+    risky = df[
+        (df["risk_score"] > threshold) &
+        (df["air_quality"].diff().fillna(0) > 0)
+    ]
+    print("\nMulti-factor Risk Zones:")
+    print(risky[["zone", "risk_score"]])
+    traffic_variance = np.var(df["traffic"])
+    if traffic_variance < 500:
+        print("\nTraffic Stability: Stable")
+    else:
+        print("\nTraffic Stability: Unstable")
+    print("\nCritical Zone Clusters:")
+    for i in range(len(df) - 1):
+        if df.iloc[i]["risk_score"] > threshold and df.iloc[i+1]["risk_score"] > threshold:
+            print(f"Cluster between Zone {df.iloc[i]['zone']} and Zone {df.iloc[i+1]['zone']}")
+
+def city_alert_protocol(avg_risk):
+    if avg_risk < 100:
+        return "City Stable"
+    elif avg_risk < 180:
+        return "Moderate Risk"
+    elif avg_risk < 250:
+        return "High Alert"
+    else:
+        return "Critical Emergency"
+city_data = simulate_urban_grid()
+
+print("Generated City Data:")
+print(city_data)
+
+city_data = restructure_city_flow(city_data)
+df = pd.DataFrame(city_data)
+print("\nSmart City DataFrame:")
+print(df)
+
+categories = assign_zone_status(city_data)
+print("\nZone Categories:")
+print(categories)
+
+matrix = df[["traffic", "air_quality", "energy"]].values
+means = np.mean(matrix, axis=0)
+print("\nMean Values:")
+print("Traffic Mean:", means[0])
+print("Air Quality Mean:", means[1])
+print("Energy Mean:", means[2])
+
+df = compute_intelligence_score(df)
+print("\nUpdated DataFrame:")
+print(df)
+
+top3 = detect_red_zones(df)
+print("\nTop 3 Worst Zones:")
+for zone in top3:
+    print(zone)
+
+max_risk = df["risk_score"].max()
+avg_risk = df["risk_score"].mean()
+min_risk = df["risk_score"].min()
+
+risk_tuple = (max_risk, avg_risk, min_risk)
+print("\nRisk Tuple:")
+print(risk_tuple)
+
+identify_hidden_patterns(df)
+decision = city_alert_protocol(avg_risk)
+print("\nFinal System Decision:")
+print(decision)
+
+print("\nSmart City Insight:")
+print("A smart city is one that predicts problems before citizens experience them.")
