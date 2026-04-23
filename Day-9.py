@@ -19,7 +19,6 @@ def build_server_records():
         }
     ]
     return users
-
 def create_replica_versions(users):
     assigned_data = users
     shallow_data = copy.copy(users)
